@@ -1,13 +1,15 @@
 import express from "express";
+import axios from "axios";
 
 const router = express.Router();
 
 // handle search results
 router.get("/", async (req, res) => {
   const { name } = req.query;
+  console.log(name);
   try {
-    const response = axios.get(
-      "https://world.openfoodfacts.org/cgi/search.pl/",
+    const response = await axios.get(
+      "https://world.openfoodfacts.org/cgi/search.pl",
       {
         params: {
           search_terms: name,
@@ -18,9 +20,9 @@ router.get("/", async (req, res) => {
         },
       }
     );
-    return res.json({ success: true, data: response });
-  } catch {
-    return res.json({ success: false, data: null });
+    return res.json({ success: true, data: response?.data.products[1] });
+  } catch (err) {
+    return res.json({ success: false, data: err.message });
   }
 });
 
