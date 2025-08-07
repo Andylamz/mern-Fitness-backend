@@ -3,12 +3,12 @@ import connectDB from "./db/database.js";
 import dotenv from "dotenv";
 // Routes import
 import searchPage from "./routes/foodSearch.js";
-import recipePage from "./routes/randomRecipes.js/";
+import recipePage from "./routes/randomRecipes.js";
 import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 
 const app = express();
-// ClerkMiddleware
+// Clerk Middleware
 app.use(clerkMiddleware());
 app.use(cors());
 
