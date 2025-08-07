@@ -73,3 +73,4 @@ app.post(
     }
   }
 );
+export default app;
