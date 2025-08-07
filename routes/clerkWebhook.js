@@ -1,6 +1,6 @@
 import { verifyWebhook } from "@clerk/express/webhooks";
 import express from "express";
-import { createOrUpdateUsers, deleteUsers } from "../actions/user";
+import { createOrUpdateUsers, deleteUsers } from "../actions/user.js";
 import { clerkClient } from "@clerk/express";
 
 const app = express();
