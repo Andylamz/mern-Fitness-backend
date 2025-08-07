@@ -16,7 +16,6 @@ router.get("/", async (req, res) => {
         },
       }
     );
-    console.log("res", response);
 
     // const filteredRecipes = response.data.recipes.map((recipe) => ({
     //   id: recipe.id,
@@ -46,7 +45,7 @@ router.get("/recipes/:id", async (req, res) => {
         },
       }
     );
-    console.log(response.data);
+
     const filteredRecipes = {
       id: response.data.id,
       title: response.data.title,

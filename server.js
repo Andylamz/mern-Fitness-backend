@@ -5,8 +5,11 @@ import dotenv from "dotenv";
 import searchPage from "./routes/foodSearch.js";
 import recipePage from "./routes/randomRecipes.js/";
 import cors from "cors";
+import { clerkMiddleware } from "@clerk/express";
 
 const app = express();
+// ClerkMiddleware
+app.use(clerkMiddleware());
 app.use(cors());
 
 // To access .env
