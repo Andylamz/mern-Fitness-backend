@@ -4,18 +4,28 @@ import dotenv from "dotenv";
 // Routes import
 import searchPage from "./routes/foodSearch.js";
 import recipePage from "./routes/randomRecipes.js";
+import webhookRoute from "./routes/clerkWebhook.js";
 import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 
 const app = express();
 // Clerk Middleware
 app.use(clerkMiddleware());
-app.use(cors());
+app.use(
+  // remember to add the actual url after deploying frontend
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 // To access .env
 dotenv.config();
-
 connectDB();
+
+// clerk webhook
+app.use("/", webhookRoute);
+
 // PORT
 const PORT = process.env.PORT || 3000;
 
