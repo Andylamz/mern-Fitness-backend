@@ -16,6 +16,7 @@ app.post(
       // For this guide, log payload to console
       const { id } = evt.data;
       const eventType = evt.type;
+      console.log(id, eventType);
 
       if (eventType === "user.created" || eventType === "user.updated") {
         const { first_name, last_name, email_addresses, image_url } = evt.data;
@@ -28,7 +29,7 @@ app.post(
             email_addresses,
             image_url
           );
-
+          console.log("webhook 1");
           if (user && eventType === "user.created") {
             console.log("start creating and updating");
             try {

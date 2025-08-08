@@ -22,6 +22,25 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    height: {
+      type: Number,
+    },
+    weight: {
+      type: Number,
+    },
+    age: {
+      type: Number,
+    },
+    gender: {
+      type: String,
+    },
+    bmr: {
+      type: Number,
+    },
+    personalData: {
+      type: String,
+      default: false,
+    },
   },
   {
     timestamps: true,
