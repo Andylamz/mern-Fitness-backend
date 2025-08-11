@@ -1,6 +1,7 @@
 import express from "express";
 import UserModel from "../Models/UserModel.js";
 import { clerkClient, requireAuth } from "@clerk/express";
+import axios from "axios";
 
 const router = express.Router();
 
@@ -25,6 +26,30 @@ router.patch("/personalDetails", async (req, res) => {
     return res.json({ success: true, msg: "Data Submitted" });
   } catch {
     return res.json({ success: false, msg: "Failed to submit data" });
+  }
+});
+
+router.get("/weather", async (req, res) => {
+  const { lon, lat } = req.query;
+  const weatherApiKey = process.env.WEATHER_API;
+  console.log(weatherApiKey);
+  if (!lon || !lat) return null;
+  try {
+    const data = await axios.get(
+      "https://api.openweathermap.org/data/2.5/weather",
+      {
+        params: {
+          lon,
+          lat,
+          appid: weatherApiKey,
+          unit: "metric",
+        },
+      }
+    );
+    console.log(data);
+    return res.json({ success: true, data: data });
+  } catch {
+    return res.json({ success: false, data: null });
   }
 });
 
