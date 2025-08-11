@@ -19,8 +19,7 @@ app.use(clerkMiddleware());
 app.use(
   // remember to add the actual url after deploying frontend
   cors({
-    origin: ["http://localhost:5173"],
-    credentials: true,
+    origin: "*",
   })
 );
 

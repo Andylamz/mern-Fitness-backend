@@ -33,7 +33,10 @@ router.get("/weather", async (req, res) => {
   const { lon, lat } = req.query;
   const weatherApiKey = process.env.WEATHER_API;
   console.log(weatherApiKey);
-  if (!lon || !lat) return null;
+  if (!lon || !lat) {
+    console.log("no lon or lat");
+    return null;
+  }
   try {
     const data = await axios.get(
       "https://api.openweathermap.org/data/2.5/weather",
