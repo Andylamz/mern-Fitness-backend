@@ -45,12 +45,12 @@ router.get("/weather", async (req, res) => {
           lon,
           lat,
           appid: weatherApiKey,
-          unit: "metric",
+          units: "metric",
         },
       }
     );
     console.log(data);
-    return res.json({ success: true, data: data });
+    return res.json({ success: true, data: data.data });
   } catch {
     return res.json({ success: false, data: null });
   }
