@@ -115,9 +115,9 @@ router.patch("/dashboardInfo/steps", async (req, res) => {
   const inputDate = req.body.date;
   const { userMongoId, steps } = req.body;
   const startOfDate = new Date(inputDate);
-  startOfDate.sethours(0, 0, 0, 0);
+  startOfDate.setHours(0, 0, 0, 0);
   const endOfDate = new Date(startOfDate);
-  endOfDate.sethours(23, 59, 59, 999);
+  endOfDate.setHours(23, 59, 59, 999);
 
   console.log("inputDate", inputDate);
   console.log("startOfDate", startOfDate);
