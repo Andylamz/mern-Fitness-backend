@@ -113,17 +113,23 @@ router.get("/dashboardInfo/steps", async (req, res) => {
 router.patch("/dashboardInfo/steps", async (req, res) => {
   const inputDate = req.body.date;
   const { userMongoId, steps } = req.body;
-  const startOfDate = new Date(inputDate).setHours(0, 0, 0, 0);
-  const endOfDate = new Date(startOfDate).setHours(23, 59, 59, 999);
+  const startOfDate = new Date(inputDate);
+  startOfDate.setHours(0, 0, 0, 0);
+  const endOfDate = new Date(startOfDate);
+  endOfDate.setHours(23, 59, 59, 999);
 
   try {
     const data = await DashboardModel.findOneAndUpdate(
       {
-        userMongoId,
+        userMongoId: userMongoId,
         date: { $gte: startOfDate, $lte: endOfDate },
       },
       {
-        $inc: { steps: steps },
+        $inc: { steps: Number(steps) },
+        $setOnInsert: {
+          userMongoId,
+          date: startOfDate,
+        },
       },
       {
         upsert: true,
