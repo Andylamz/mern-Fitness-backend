@@ -2,6 +2,7 @@ import express from "express";
 import UserModel from "../Models/UserModel.js";
 import { clerkClient, requireAuth } from "@clerk/express";
 import axios from "axios";
+import DashboardModel from "../Models/DashboardModel.js";
 
 const router = express.Router();
 
@@ -51,6 +52,32 @@ router.get("/weather", async (req, res) => {
     );
     console.log(data);
     return res.json({ success: true, data: data.data });
+  } catch {
+    return res.json({ success: false, data: null });
+  }
+});
+
+router.get("/dashboardInfo/today", async (req, res) => {
+  const { userMongoId } = req.query;
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const dashboard = await DashboardModel.findOneAndUpdate(
+      { userMongoId, date: today },
+      {
+        $setOnInsert: {
+          userMongoId,
+          date: today,
+        },
+      },
+      {
+        new: true,
+        upsert: true,
+      }
+    );
+    console.log(dashboard.data.data);
+    return res.json({ success: true, data: dashboard, msg: "hi" });
   } catch {
     return res.json({ success: false, data: null });
   }
