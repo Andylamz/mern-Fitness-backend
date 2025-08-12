@@ -77,7 +77,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
       }
     );
     console.log(dashboard);
-    return res.json({ success: true, data: dashboard.data, msg: "hi" });
+    return res.json({ success: true, data: dashboard, msg: "hi" });
   } catch {
     return res.json({ success: false, data: null });
   }
