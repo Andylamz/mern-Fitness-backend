@@ -75,9 +75,34 @@ router.get("/dashboardInfo/today", async (req, res) => {
         new: true,
         upsert: true,
       }
-    );
+    ).populate("userMongoId");
     console.log(dashboard);
     return res.json({ success: true, data: dashboard, msg: "hi" });
+  } catch {
+    return res.json({ success: false, data: null });
+  }
+});
+
+router.get("/dashboardInfo/steps", async (req, res) => {
+  const { userMongoId } = req.query;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const sevenDaysAgo = new Date(today);
+  sevenDaysAgo.setDate(today.getDate() - 6);
+
+  try {
+    const data = await DashboardModel.find({
+      userMongoId,
+      date: {
+        $gte: sevenDaysAgo,
+        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+      },
+    })
+      .sort({ date: 1 })
+      .select({ date: 1, steps: 1 });
+    console.log(data);
+    return res.json({ success: true, data: data });
   } catch {
     return res.json({ success: false, data: null });
   }
