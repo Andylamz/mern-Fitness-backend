@@ -74,6 +74,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
       {
         new: true,
         upsert: true,
+        setDefaultsOnInsert: true,
       }
     ).populate("userMongoId");
     console.log(dashboard);
@@ -111,13 +112,25 @@ router.get("/dashboardInfo/steps", async (req, res) => {
 // PATCH steps
 router.patch("/dashboardInfo/steps", async (req, res) => {
   const inputDate = req.body.date;
+  const { userMongoId, steps } = req.body;
   const startOfDate = new Date(inputDate).setHours(0, 0, 0, 0);
   const endOfDate = new Date(startOfDate).setHours(23, 59, 59, 999);
 
   try {
-    const data = await DashboardModel.findOne({
-      date: { $gte: startOfDate, $lte: endOfDate },
-    }).select({ date: 1, steps: 1, _id: 0 });
+    const data = await DashboardModel.findOneAndUpdate(
+      {
+        userMongoId,
+        date: { $gte: startOfDate, $lte: endOfDate },
+      },
+      {
+        $inc: { steps: steps },
+      },
+      {
+        upsert: true,
+        setDefaultsOnInsert: true,
+        new: true,
+      }
+    ).select({ date: 1, steps: 1, _id: 0 });
     return res.json({ success: true, data: data });
   } catch {
     return res.json({ success: false, data: null });
