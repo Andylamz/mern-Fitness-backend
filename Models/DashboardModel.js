@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import UserModel from "./UserModel";
+import UserModel from "./UserModel.js";
 const DashboardSchema = new mongoose.Schema({
   userMongoId: {
     type: mongoose.Schema.Types.ObjectId,
