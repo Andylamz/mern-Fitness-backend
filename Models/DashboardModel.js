@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-
+import UserModel from "./UserModel";
 const DashboardSchema = new mongoose.Schema({
   userMongoId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: user,
+    ref: "user",
     required: true,
   },
   steps: {
