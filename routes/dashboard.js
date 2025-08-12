@@ -36,7 +36,7 @@ router.get("/weather", async (req, res) => {
 
   if (!lon || !lat) {
     console.log("no lon or lat");
-    return null;
+    return res.json({ success: false, data: null, msg: "No lon or lat" });
   }
   try {
     const data = await axios.get(
