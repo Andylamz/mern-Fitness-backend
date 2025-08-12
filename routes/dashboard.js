@@ -83,6 +83,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
   }
 });
 
+// GET steps
 router.get("/dashboardInfo/steps", async (req, res) => {
   const { userMongoId } = req.query;
   const today = new Date();
@@ -107,5 +108,19 @@ router.get("/dashboardInfo/steps", async (req, res) => {
     return res.json({ success: false, data: null });
   }
 });
+// PATCH steps
+router.patch("/dashboardInfo/steps", async (req, res) => {
+  const inputDate = req.body.date;
+  const startOfDate = new Date(inputDate).setHours(0, 0, 0, 0);
+  const endOfDate = new Date(startOfDate).setHours(23, 59, 59, 999);
 
+  try {
+    const data = await DashboardModel.findOne({
+      date: { $gte: startOfDate, $lte: endOfDate },
+    }).select({ date: 1, steps: 1, _id: 0 });
+    return res.json({ success: true, data: data });
+  } catch {
+    return res.json({ success: false, data: null });
+  }
+});
 export default router;
