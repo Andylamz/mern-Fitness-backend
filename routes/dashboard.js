@@ -33,7 +33,7 @@ router.patch("/personalDetails", async (req, res) => {
 router.get("/weather", async (req, res) => {
   const { lon, lat } = req.query;
   const weatherApiKey = process.env.WEATHER_API;
-  console.log(weatherApiKey);
+
   if (!lon || !lat) {
     console.log("no lon or lat");
     return null;
@@ -50,7 +50,7 @@ router.get("/weather", async (req, res) => {
         },
       }
     );
-    console.log(data);
+
     return res.json({ success: true, data: data.data });
   } catch {
     return res.json({ success: false, data: null });
@@ -76,8 +76,8 @@ router.get("/dashboardInfo/today", async (req, res) => {
         upsert: true,
       }
     );
-    console.log(dashboard.data.data);
-    return res.json({ success: true, data: dashboard, msg: "hi" });
+    console.log(dashboard);
+    return res.json({ success: true, data: dashboard.data, msg: "hi" });
   } catch {
     return res.json({ success: false, data: null });
   }
