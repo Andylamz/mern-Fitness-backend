@@ -6,7 +6,7 @@ import DashboardModel from "../Models/DashboardModel.js";
 
 const router = express.Router();
 
-router.use(requireAuth());
+// router.use(requireAuth());
 
 router.patch("/personalDetails", async (req, res) => {
   const { mongoId, age, height, weight, gender, bmr, clerkId } = req.body;
@@ -88,10 +88,10 @@ router.get("/dashboardInfo/today", async (req, res) => {
 router.get("/dashboardInfo/steps", async (req, res) => {
   const { userMongoId } = req.query;
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
 
   const sevenDaysAgo = new Date(today);
-  sevenDaysAgo.setDate(today.getDate() - 6);
+  sevenDaysAgo.setUTCDate(today.getDate() - 6);
 
   try {
     const data = await DashboardModel.find({
@@ -114,10 +114,13 @@ router.patch("/dashboardInfo/steps", async (req, res) => {
   const inputDate = req.body.date;
   const { userMongoId, steps } = req.body;
   const startOfDate = new Date(inputDate);
-  startOfDate.setHours(0, 0, 0, 0);
+  startOfDate.setUTCHours(0, 0, 0, 0);
   const endOfDate = new Date(startOfDate);
-  endOfDate.setHours(23, 59, 59, 999);
+  endOfDate.setUTCHours(23, 59, 59, 999);
 
+  console.log("inputDate", inputDate);
+  console.log("startOfDate", startOfDate);
+  console.log("endOfDate", endOfDate);
   try {
     const data = await DashboardModel.findOneAndUpdate(
       {
