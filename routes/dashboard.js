@@ -61,14 +61,23 @@ router.get("/dashboardInfo/today", async (req, res) => {
   const { userMongoId } = req.query;
   try {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const [yyyy, mm, dd] = today
+      .toISOString()
+      .split("T")[0]
+      .split("-")
+      .map(Number);
+    const startOfDate = new Date(Date.UTC(yyyy, mm - 1, dd));
+
+    const user = await UserModel.findById(userMongoId);
+    // console.log(user, "userr");
 
     const dashboard = await DashboardModel.findOneAndUpdate(
-      { userMongoId, date: today },
+      { userMongoId, date: startOfDate },
       {
         $setOnInsert: {
           userMongoId,
           date: today,
+          weight: user.weight,
         },
       },
       {
@@ -77,14 +86,14 @@ router.get("/dashboardInfo/today", async (req, res) => {
         setDefaultsOnInsert: true,
       }
     ).populate("userMongoId");
-    console.log(dashboard);
+    // console.log(dashboard);
     return res.json({ success: true, data: dashboard, msg: "hi" });
   } catch {
     return res.json({ success: false, data: null });
   }
 });
 
-// GET steps
+// GET past 7 days info
 router.get("/dashboardInfo/pastDays", async (req, res) => {
   const { userMongoId } = req.query;
   const today = new Date();

@@ -38,6 +38,10 @@ const DashboardSchema = new mongoose.Schema({
     type: Date,
     default: () => new Date(new Date().setHours(0, 0, 0, 0)),
   },
+  weight: {
+    type: Number,
+    default: 60,
+  },
 });
 
 const DashboardModel =
