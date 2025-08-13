@@ -66,6 +66,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
       .split("T")[0]
       .split("-")
       .map(Number);
+
     const startOfDate = new Date(Date.UTC(yyyy, mm - 1, dd));
 
     const user = await UserModel.findById(userMongoId);
@@ -155,7 +156,7 @@ router.patch("/dashboardInfo/steps", async (req, res) => {
 });
 
 // PATCH Weight
-router.patch("/dashboardInfo/weights", async (req, res) => {
+router.patch("/dashboardInfo/weight", async (req, res) => {
   const { userMongoId, updatedWeight } = req.body;
   const [startOfDate, endOfDate] = getTodayDate();
 
@@ -187,6 +188,33 @@ router.patch("/dashboardInfo/weights", async (req, res) => {
     return res.json({ success: false, data: null });
   }
 });
+
+// PATCH exercise
+router.patch("/dashboardInfo/exercise", async (req, res) => {
+  const [startOfDate, endOfDate] = getTodayDate();
+  const { userMongoId, exerciseTime, estimiatedCalorieBurn } = req.body;
+
+  try {
+    const res = await DashboardModel.findOneAndUpdate(
+      {
+        userMongoId,
+        date: { $gte: startOfDate, $lt: endOfDate },
+      },
+      {
+        exercise: exerciseTime,
+        exerciseBurn: estimiatedCalorieBurn,
+      },
+      {
+        new: true,
+      }
+    );
+    console.log(res);
+    return res.json({ success: true, data: res });
+  } catch {
+    return res.json({ success: false, data: null });
+  }
+});
+
 export default router;
 
 function getTodayDate() {

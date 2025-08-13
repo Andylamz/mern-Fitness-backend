@@ -30,6 +30,10 @@ const DashboardSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  exerciseBurn: {
+    type: Number,
+    default: 0,
+  },
   hydration: {
     type: Number,
     default: 0,
