@@ -6,7 +6,7 @@ import DashboardModel from "../Models/DashboardModel.js";
 
 const router = express.Router();
 
-router.use(requireAuth());
+// router.use(requireAuth());
 
 router.patch("/personalDetails", async (req, res) => {
   const { mongoId, age, height, weight, gender, bmr, clerkId } = req.body;
@@ -69,14 +69,13 @@ router.get("/dashboardInfo/today", async (req, res) => {
     const startOfDate = new Date(Date.UTC(yyyy, mm - 1, dd));
 
     const user = await UserModel.findById(userMongoId);
-    // console.log(user, "userr");
 
     const dashboard = await DashboardModel.findOneAndUpdate(
       { userMongoId, date: startOfDate },
       {
         $setOnInsert: {
           userMongoId,
-          date: today,
+          date: startOfDate,
           weight: user.weight,
         },
       },
@@ -154,4 +153,50 @@ router.patch("/dashboardInfo/steps", async (req, res) => {
     return res.json({ success: false, data: null });
   }
 });
+
+// PATCH Weight
+router.patch("/dashboardInfo/weights", async (req, res) => {
+  const { userMongoId, updatedWeight } = req.body;
+  const [startOfDate, endOfDate] = getTodayDate();
+  console.log(startOfDate, endOfDate);
+
+  try {
+    const updateProfile = await UserModel.findByIdAndUpdate(userMongoId, {
+      weight: updatedWeight,
+    });
+    console.log(updateProfile);
+    const updateDashboard = await DashboardModel.findOneAndUpdate(
+      {
+        userMongoId,
+        date: {
+          $gte: startOfDate,
+          $lt: endOfDate,
+        },
+      },
+      {
+        weight: updatedWeight,
+      },
+      {
+        new: true,
+      }
+    );
+    console.log(updateDashboard);
+    return res.json({ success: true, data: updateDashboard });
+  } catch {
+    return res.json({ success: false, data: null });
+  }
+});
 export default router;
+
+function getTodayDate() {
+  const today = new Date();
+  const [yyyy, mm, dd] = today
+    .toISOString()
+    .split("T")[0]
+    .split("-")
+    .map(Number);
+  const startOfDate = new Date(Date.UTC(yyyy, mm - 1, dd));
+  const endOfDate = new Date(Date.UTC(year, month - 1, date + 1));
+
+  return [startOfDate, endOfDate];
+}
