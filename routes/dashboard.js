@@ -196,7 +196,7 @@ function getTodayDate() {
     .split("-")
     .map(Number);
   const startOfDate = new Date(Date.UTC(yyyy, mm - 1, dd));
-  const endOfDate = new Date(Date.UTC(year, month - 1, date + 1));
+  const endOfDate = new Date(Date.UTC(yyyy, mm - 1, dd + 1));
 
   return [startOfDate, endOfDate];
 }
