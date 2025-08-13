@@ -85,7 +85,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
 });
 
 // GET steps
-router.get("/dashboardInfo/steps", async (req, res) => {
+router.get("/dashboardInfo/pastDays", async (req, res) => {
   const { userMongoId } = req.query;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -100,9 +100,8 @@ router.get("/dashboardInfo/steps", async (req, res) => {
         $gte: sevenDaysAgo,
         $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
       },
-    })
-      .sort({ date: 1 })
-      .select({ date: 1, steps: 1 });
+    }).sort({ date: 1 });
+
     console.log(data);
     return res.json({ success: true, data: data });
   } catch {
