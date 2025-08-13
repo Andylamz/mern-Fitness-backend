@@ -195,21 +195,21 @@ router.patch("/dashboardInfo/exercise", async (req, res) => {
   const { userMongoId, exerciseTime, estimiatedCalorieBurn } = req.body;
 
   try {
-    const res = await DashboardModel.findOneAndUpdate(
+    const data = await DashboardModel.findOneAndUpdate(
       {
         userMongoId,
         date: { $gte: startOfDate, $lt: endOfDate },
       },
       {
-        exercise: exerciseTime,
-        exerciseBurn: estimiatedCalorieBurn,
+        $inc: { exercise: Number(exerciseTime) },
+        $inc: { exerciseBurn: Number(estimiatedCalorieBurn) },
       },
       {
         new: true,
       }
     );
-    console.log(res);
-    return res.json({ success: true, data: res });
+    console.log(data);
+    return res.json({ success: true, data: data });
   } catch {
     return res.json({ success: false, data: null });
   }
