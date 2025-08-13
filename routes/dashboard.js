@@ -6,7 +6,7 @@ import DashboardModel from "../Models/DashboardModel.js";
 
 const router = express.Router();
 
-// router.use(requireAuth());
+router.use(requireAuth());
 
 router.patch("/personalDetails", async (req, res) => {
   const { mongoId, age, height, weight, gender, bmr, clerkId } = req.body;
@@ -158,13 +158,15 @@ router.patch("/dashboardInfo/steps", async (req, res) => {
 router.patch("/dashboardInfo/weights", async (req, res) => {
   const { userMongoId, updatedWeight } = req.body;
   const [startOfDate, endOfDate] = getTodayDate();
-  console.log(startOfDate, endOfDate);
 
   try {
-    const updateProfile = await UserModel.findByIdAndUpdate(userMongoId, {
-      weight: updatedWeight,
-    });
-    console.log(updateProfile);
+    const updateProfile = await UserModel.findByIdAndUpdate(
+      userMongoId,
+      {
+        weight: updatedWeight,
+      },
+      { new: true }
+    );
     const updateDashboard = await DashboardModel.findOneAndUpdate(
       {
         userMongoId,
@@ -180,7 +182,6 @@ router.patch("/dashboardInfo/weights", async (req, res) => {
         new: true,
       }
     );
-    console.log(updateDashboard);
     return res.json({ success: true, data: updateDashboard });
   } catch {
     return res.json({ success: false, data: null });
