@@ -6,7 +6,7 @@ import DashboardModel from "../Models/DashboardModel.js";
 
 const router = express.Router();
 
-// router.use(requireAuth());
+router.use(requireAuth());
 
 router.patch("/personalDetails", async (req, res) => {
   const { mongoId, age, height, weight, gender, bmr, clerkId } = req.body;
@@ -215,6 +215,31 @@ router.patch("/dashboardInfo/exercise", async (req, res) => {
     return res.json({ success: true, data: data });
   } catch {
     return res.json({ success: false, data: null });
+  }
+});
+
+// PATCH hydration
+router.patch("/dashboardInfo/hydration", async (req, res) => {
+  const { userMongoId, hydration } = req.body;
+  const [startOfDate, endOfDate] = getTodayDate();
+
+  try {
+    const data = await DashboardModel.findOneAndUpdate(
+      { userMongoId, date: { $gte: startOfDate, $lt: endOfDate } },
+      {
+        $inc: {
+          hydration: Number(hydration),
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    console.log(data);
+    return res.json({ success: true, data: data });
+  } catch (err) {
+    console.log(err.message);
+    res.json({ success: false, data: null });
   }
 });
 
