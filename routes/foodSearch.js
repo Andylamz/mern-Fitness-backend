@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
           action: "process",
           search_simple: 1,
           // countries: "united-kingdom",
-          page_size: 20,
+          page_size: 40,
           json: 1,
         },
       }
@@ -47,4 +47,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+// handle search by id
+router.get("/product", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const data = await axios.get(
+      `https://world.openfoodfacts.org/api/v0/product/${id}.json`
+    );
+    console.log(data);
+    return res.json({ success: true, data: data });
+  } catch {
+    return res.json({ success: false, data: null });
+  }
+});
 export default router;
