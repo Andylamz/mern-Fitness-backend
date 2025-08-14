@@ -13,14 +13,35 @@ router.get("/", async (req, res) => {
       {
         params: {
           search_terms: name,
-          seach_simple: 1,
           action: "process",
+          search_simple: 1,
+          // countries: "united-kingdom",
+          page_size: 20,
           json: 1,
-          country: "united-kingdom",
         },
       }
     );
-    return res.json({ success: true, data: response?.data.products[1] });
+
+    const products = response.data?.products ?? [];
+    const simplied = products.map((product) => {
+      const nutrition = product.nutriments;
+      return {
+        id: product._id,
+        productName: product.product_name,
+        brand: product.brands,
+        nutriments: {
+          energy_kcal_100g: nutrition["energy-kcal_100g"],
+          proteins_100g: nutrition.proteins_100g,
+          carbohydrates_100g: nutrition.carbohydrates_100g,
+          fiber_100g: nutrition.fiber_100g,
+        },
+      };
+    });
+    const filtered = simplied.filter(
+      (item) => item.productName && item.nutriments
+    );
+    console.log(filtered);
+    return res.json({ success: true, data: filtered });
   } catch (err) {
     return res.json({ success: false, data: err.message });
   }

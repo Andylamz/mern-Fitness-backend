@@ -1,5 +1,43 @@
 import mongoose from "mongoose";
 import UserModel from "./UserModel.js";
+
+const FoodSchema = new mongoose.Schema({
+  productName: {
+    type: String,
+    required: true,
+  },
+  brand: {
+    type: String,
+    required: true,
+  },
+  id: {
+    type: String,
+    required: true,
+  },
+  total_kcal: {
+    type: Number,
+    required: true,
+  },
+  total_protein: {
+    type: Number,
+    required: true,
+  },
+  total_carbonhydrates: {
+    type: Number,
+    required: true,
+  },
+  total_fiber: {
+    type: Number,
+    required: true,
+  },
+  nutriments: {
+    energy_kcal_100g: { type: Number },
+    proteins_100g: { type: Number },
+    carbohydrates_100g: { type: Number },
+    fiber_100g: { type: Number },
+  },
+});
+
 const DashboardSchema = new mongoose.Schema({
   userMongoId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -46,6 +84,7 @@ const DashboardSchema = new mongoose.Schema({
     type: Number,
     default: 60,
   },
+  foods: [FoodSchema],
 });
 
 const DashboardModel =
