@@ -50,24 +50,25 @@ router.get("/", async (req, res) => {
 // handle search by id
 router.get("/product", async (req, res) => {
   const id = req.query.id;
+  console.log(id);
   try {
     const data = await axios.get(
       `https://world.openfoodfacts.org/api/v0/product/${id}.json`
     );
-
+    console.log(data.data);
     const filtered = {
-      id: data?.data["_id"],
-      productName: data?.data["product_name"],
-      proteins_100g: data?.data["proteins_100g"],
-      carbohydrates_100g: data?.data["carbohydrates_100g"],
-      energy_kcal_100g: data?.data["energy-kcal_100g"],
-      fiber_100g: data?.data["fiber_100g"],
-      brand: data?.data[brand],
+      id: data?.data.product["_id"],
+      productName: data?.data.product["product_name"],
+      proteins_100g: data?.data.product.nutriments["proteins_100g"],
+      carbohydrates_100g: data?.data.product.nutriments["carbohydrates_100g"],
+      energy_kcal_100g: data?.data.product.nutriments["energy-kcal_100g"],
+      fiber_100g: data?.data.product.nutriments["fiber_100g"],
+      brand: data?.data.product["brands"],
     };
-
+    console.log(filtered);
     return res.json({ success: true, data: filtered });
   } catch (err) {
-    // console.log(err.message);
+    console.log(err.message);
     return res.json({ success: false, data: null });
   }
 });
