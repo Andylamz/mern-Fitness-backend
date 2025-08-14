@@ -30,12 +30,6 @@ const FoodSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  nutriments: {
-    energy_kcal_100g: { type: Number },
-    proteins_100g: { type: Number },
-    carbohydrates_100g: { type: Number },
-    fiber_100g: { type: Number },
-  },
 });
 
 const DashboardSchema = new mongoose.Schema({
