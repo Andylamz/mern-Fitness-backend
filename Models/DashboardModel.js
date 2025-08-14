@@ -30,6 +30,10 @@ const FoodSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  portion: {
+    type: Number,
+    required: true,
+  },
 });
 
 const DashboardSchema = new mongoose.Schema({

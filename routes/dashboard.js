@@ -237,6 +237,28 @@ router.patch("/dashboardInfo/hydration", async (req, res) => {
   }
 });
 
+router.patch("dashboardInfo/logFood", async (req, res) => {
+  const { userMongoId, foods } = req.body;
+  const [startOfDate, endOfDate] = getTodayDate();
+
+  try {
+    const data = await DashboardModel.findOneAndUpdate(
+      { userMongoId, date: { $gte: startOfDate, $lt: endOfDate } },
+      {
+        $push: {
+          foods: foods,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    return res.json({ success: true, data: data });
+  } catch {
+    return res.json({ success: false, data: null });
+  }
+});
+
 export default router;
 
 function getTodayDate() {
