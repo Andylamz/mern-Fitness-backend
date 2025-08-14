@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
 router.get("/recipes/:id", async (req, res) => {
   const api = process.env.SPOONACULAR_API_KEY;
   const id = req.params.id;
-  console.log(api);
+
   try {
     const response = await axios.get(
       `https://api.spoonacular.com/recipes/${id}/information`,

@@ -6,7 +6,7 @@ const router = express.Router();
 // handle search results
 router.get("/", async (req, res) => {
   const { name } = req.query;
-  console.log(name);
+
   try {
     const response = await axios.get(
       "https://world.openfoodfacts.org/cgi/search.pl",
@@ -40,7 +40,7 @@ router.get("/", async (req, res) => {
     const filtered = simplied.filter(
       (item) => item.productName && item.nutriments
     );
-    console.log(filtered);
+
     return res.json({ success: true, data: filtered });
   } catch (err) {
     return res.json({ success: false, data: err.message });
@@ -50,6 +50,7 @@ router.get("/", async (req, res) => {
 // handle search by id
 router.get("/product", async (req, res) => {
   const id = req.params.id;
+  console.log("id", id);
   try {
     const data = await axios.get(
       `https://world.openfoodfacts.org/api/v0/product/${id}.json`

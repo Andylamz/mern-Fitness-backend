@@ -10,7 +10,7 @@ router.use(requireAuth());
 
 router.patch("/personalDetails", async (req, res) => {
   const { mongoId, age, height, weight, gender, bmr, clerkId } = req.body;
-  console.log(mongoId, age, height, weight, gender, clerkId);
+
   try {
     const data = await UserModel.findByIdAndUpdate(mongoId, {
       age,
@@ -35,7 +35,6 @@ router.get("/weather", async (req, res) => {
   const weatherApiKey = process.env.WEATHER_API;
 
   if (!lon || !lat) {
-    console.log("no lon or lat");
     return res.json({ success: false, data: null, msg: "No lon or lat" });
   }
   try {
@@ -71,7 +70,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
     const startOfDate = new Date(Date.UTC(yyyy, mm - 1, dd));
 
     const user = await UserModel.findById(userMongoId);
-    console.log(startOfDate);
+
     const dashboard = await DashboardModel.findOneAndUpdate(
       { userMongoId, date: startOfDate },
       {
@@ -87,7 +86,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
         setDefaultsOnInsert: true,
       }
     ).populate("userMongoId");
-    console.log(dashboard);
+
     return res.json({ success: true, data: dashboard });
   } catch {
     return res.json({ success: false, data: null });
@@ -112,7 +111,6 @@ router.get("/dashboardInfo/pastDays", async (req, res) => {
       },
     }).sort({ date: 1 });
 
-    console.log(data);
     return res.json({ success: true, data: data });
   } catch {
     return res.json({ success: false, data: null });
@@ -126,10 +124,6 @@ router.patch("/dashboardInfo/steps", async (req, res) => {
   const [year, month, date] = inputDate.split("-").map(Number);
   const startOfDate = new Date(Date.UTC(year, month - 1, date));
   const endOfDate = new Date(Date.UTC(year, month - 1, date + 1));
-
-  console.log("inputDate", inputDate);
-  console.log("startOfDate", startOfDate);
-  console.log("endOfDate", endOfDate);
 
   try {
     const data = await DashboardModel.findOneAndUpdate(
@@ -211,7 +205,7 @@ router.patch("/dashboardInfo/exercise", async (req, res) => {
         new: true,
       }
     );
-    console.log(data);
+
     return res.json({ success: true, data: data });
   } catch {
     return res.json({ success: false, data: null });
@@ -235,7 +229,7 @@ router.patch("/dashboardInfo/hydration", async (req, res) => {
         new: true,
       }
     );
-    console.log(data);
+
     return res.json({ success: true, data: data });
   } catch (err) {
     console.log(err.message);
