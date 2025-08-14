@@ -6,7 +6,7 @@ import DashboardModel from "../Models/DashboardModel.js";
 
 const router = express.Router();
 
-router.use(requireAuth());
+// router.use(requireAuth());
 
 router.patch("/personalDetails", async (req, res) => {
   const { mongoId, age, height, weight, gender, bmr, clerkId } = req.body;
@@ -57,6 +57,7 @@ router.get("/weather", async (req, res) => {
   }
 });
 
+// GET today info
 router.get("/dashboardInfo/today", async (req, res) => {
   const { userMongoId } = req.query;
   try {
@@ -70,7 +71,7 @@ router.get("/dashboardInfo/today", async (req, res) => {
     const startOfDate = new Date(Date.UTC(yyyy, mm - 1, dd));
 
     const user = await UserModel.findById(userMongoId);
-
+    console.log(startOfDate);
     const dashboard = await DashboardModel.findOneAndUpdate(
       { userMongoId, date: startOfDate },
       {
@@ -86,8 +87,8 @@ router.get("/dashboardInfo/today", async (req, res) => {
         setDefaultsOnInsert: true,
       }
     ).populate("userMongoId");
-    // console.log(dashboard);
-    return res.json({ success: true, data: dashboard, msg: "hi" });
+    console.log(dashboard);
+    return res.json({ success: true, data: dashboard });
   } catch {
     return res.json({ success: false, data: null });
   }
@@ -201,8 +202,10 @@ router.patch("/dashboardInfo/exercise", async (req, res) => {
         date: { $gte: startOfDate, $lt: endOfDate },
       },
       {
-        $inc: { exercise: Number(exerciseTime) },
-        $inc: { exerciseBurn: Number(estimiatedCalorieBurn) },
+        $inc: {
+          exerciseBurn: Number(estimiatedCalorieBurn),
+          exercise: Number(exerciseTime),
+        },
       },
       {
         new: true,
