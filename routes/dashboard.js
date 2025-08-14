@@ -237,7 +237,7 @@ router.patch("/dashboardInfo/hydration", async (req, res) => {
   }
 });
 
-router.patch("dashboardInfo/logFood", async (req, res) => {
+router.patch("/dashboardInfo/logFood", async (req, res) => {
   const { userMongoId, foods } = req.body;
   const [startOfDate, endOfDate] = getTodayDate();
 
